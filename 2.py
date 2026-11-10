@@ -44,11 +44,10 @@ def f(u, a1, a2, a3):
     x = u[0]
     y = u[1]
     z = u[2]
-
     return np.array([
         a1 * y * z,
         x - a2 * y,
-        a3 - x * x
+        a3 - x * y
     ])
 
 

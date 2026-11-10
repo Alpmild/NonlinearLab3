@@ -19,22 +19,14 @@ def kd(f, u0, t0, t1, h, a1, a2, a3, s=0.5):
     for i in range(n):
         x, y, z = u[i]
 
-        x_new = x + h1 * a1 * y * z
-        y_new = y + h1 * (x_new - a2 * y)
-        z_new = z + h1 * (a3 - x_new * y_new)
+        x_m = x + h1 * a1 * y * z
+        y_m = y + h1 * (x_m - a2 * y)
+        z_m = z + h1 * (a3 - x_m * y_m)
 
-        u_half = np.array([x_new, y_new, z_new])
-        u_new = u_half.copy()
+        z_new = z_m + h2 * (a3 - x_m * y_m)
+        y_new = (y_m + h2 * x_m) / (1 + a2 * h2)
+        x_new = x_m + h2 * a1 * y_new * z_new
 
-        for _ in range(4):
-            k2 = f(u_new, a1, a2, a3)
-            u_new = u_half + h2 * k2
-
-        # y_n1 = (y_new + h2) / (1 + h2 * x_new)
-        # x_n1 = x_new + h2 * (y_n1 * z_new)
-        # z_n1 = z_new + h2 * (1 - x_n1 * y_n1)
-        # u_new = np.array([x_n1, y_n1, z_n1])
-
-        u[i + 1] = u_new
+        u[i + 1] = np.array([x_new, y_new, z_new])
 
     return t, u
